@@ -1,54 +1,266 @@
-<header>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WIICKED STUDIOS</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.x.x/firebase-firestore.js"></script>
+    <style>
+        /* Previous styles remain... */
 
-<!--
-  <<< Author notes: Course header >>>
-  Include a 1280×640 image, course title in sentence case, and a concise description in emphasis.
-  In your repository settings: enable template repository, add your 1280×640 social image, auto delete head branches.
-  Add your open source license, GitHub uses MIT license.
--->
+        /* Newsletter Styles */
+        .newsletter-section {
+            background: #f5f5f5;
+            padding: 4rem 2rem;
+            text-align: center;
+        }
 
-# GitHub Pages
+        .newsletter-content {
+            max-width: 600px;
+            margin: 0 auto;
+        }
 
-_Create a site or blog from your GitHub repositories with GitHub Pages._
+        .newsletter-form {
+            display: flex;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
 
-</header>
+        .newsletter-form input {
+            flex: 1;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+        }
 
-<!--
-  <<< Author notes: Step 1 >>>
-  Choose 3-5 steps for your course.
-  The first step is always the hardest, so pick something easy!
-  Link to docs.github.com for further explanations.
-  Encourage users to open new tabs for steps!
--->
+        .newsletter-form button {
+            padding: 1rem 2rem;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
 
-## Step 1: Enable GitHub Pages
+        /* Size Guide Styles */
+        .size-guide-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1100;
+        }
 
-_Welcome to GitHub Pages and Jekyll :tada:!_
+        .size-guide-content {
+            background: white;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 2rem;
+            border-radius: 8px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
 
-The first step is to enable GitHub Pages on this [repository](https://docs.github.com/en/get-started/quickstart/github-glossary#repository). When you enable GitHub Pages on a repository, GitHub takes the content that's on the main branch and publishes a website based on its contents.
+        .size-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 2rem 0;
+        }
 
-### :keyboard: Activity: Enable GitHub Pages
+        .size-table th,
+        .size-table td {
+            border: 1px solid var(--border-color);
+            padding: 1rem;
+            text-align: center;
+        }
 
-1. Open a new browser tab, and work on the steps in your second tab while you read the instructions in this tab.
-1. Under your repository name, click **Settings**.
-1. Click **Pages** in the **Code and automation** section.
-1. Ensure "Deploy from a branch" is selected from the **Source** drop-down menu, and then select `main` from the **Branch** drop-down menu.
-1. Click the **Save** button.
-1. Wait about _one minute_ then refresh this page (the one you're following instructions from). [GitHub Actions](https://docs.github.com/en/actions) will automatically update to the next step.
-   > Turning on GitHub Pages creates a deployment of your repository. GitHub Actions may take up to a minute to respond while waiting for the deployment. Future steps will be about 20 seconds; this step is slower.
-   > **Note**: In the **Pages** of **Settings**, the **Visit site** button will appear at the top. Click the button to see your GitHub Pages site.
+        /* Care Instructions Styles */
+        .care-instructions {
+            margin-top: 2rem;
+            padding: 2rem;
+            background: #f5f5f5;
+            border-radius: 8px;
+        }
 
-<footer>
+        .care-icons {
+            display: flex;
+            gap: 2rem;
+            margin-top: 1rem;
+            justify-content: center;
+        }
 
-<!--
-  <<< Author notes: Footer >>>
-  Add a link to get support, GitHub status page, code of conduct, license link.
--->
+        .care-icon {
+            text-align: center;
+        }
 
----
+        .care-icon i {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
 
-Get help: [Post in our discussion board](https://github.com/orgs/skills/discussions/categories/github-pages) &bull; [Review the GitHub status page](https://www.githubstatus.com/)
+        /* Success Message */
+        .success-message {
+            display: none;
+            background: #4CAF50;
+            color: white;
+            padding: 1rem;
+            border-radius: 4px;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Previous content remains... -->
 
-&copy; 2023 GitHub &bull; [Code of Conduct](https://www.contributor-covenant.org/version/2/1/code_of_conduct/code_of_conduct.md) &bull; [MIT License](https://gh.io/mit)
+    <!-- Newsletter Section -->
+    <section class="newsletter-section">
+        <div class="newsletter-content">
+            <h2>Join the WIICKED Community</h2>
+            <p>Be the first to know about new drops, exclusive offers, and limited edition releases.</p>
+            <form class="newsletter-form" id="newsletter-form">
+                <input type="email" placeholder="Enter your email" required>
+                <button type="submit">Sign Up</button>
+            </form>
+            <div class="success-message">
+                Thanks for joining! Check your email to confirm your subscription.
+            </div>
+        </div>
+    </section>
 
-</footer>
+    <!-- Size Guide Modal -->
+    <div class="size-guide-modal" id="size-guide-modal">
+        <div class="size-guide-content">
+            <h2>Size Guide</h2>
+            <table class="size-table">
+                <thead>
+                    <tr>
+                        <th>Size</th>
+                        <th>Chest (cm)</th>
+                        <th>Length (cm)</th>
+                        <th>Shoulder (cm)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>S</td>
+                        <td>96-101</td>
+                        <td>66-68</td>
+                        <td>44-46</td>
+                    </tr>
+                    <tr>
+                        <td>M</td>
+                        <td>101-106</td>
+                        <td>68-70</td>
+                        <td>46-48</td>
+                    </tr>
+                    <tr>
+                        <td>L</td>
+                        <td>106-111</td>
+                        <td>70-72</td>
+                        <td>48-50</td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="close-modal">Close</button>
+        </div>
+    </div>
+
+    <!-- Care Instructions -->
+    <div class="care-instructions">
+        <h3>Care Instructions</h3>
+        <div class="care-icons">
+            <div class="care-icon">
+                <i class="fas fa-tint"></i>
+                <p>Machine wash cold</p>
+            </div>
+            <div class="care-icon">
+                <i class="fas fa-ban"></i>
+                <p>Do not bleach</p>
+            </div>
+            <div class="care-icon">
+                <i class="fas fa-temperature-low"></i>
+                <p>Tumble dry low</p>
+            </div>
+            <div class="care-icon">
+                <i class="fas fa-iron"></i>
+                <p>Iron on low heat</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Firebase Configuration
+        const firebaseConfig = {
+            // Replace with your Firebase config
+            apiKey: "your-api-key",
+            authDomain: "your-auth-domain",
+            projectId: "your-project-id",
+            storageBucket: "your-bucket",
+            messagingSenderId: "your-sender-id",
+            appId: "your-app-id"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        // Newsletter Signup
+        const newsletterForm = document.getElementById('newsletter-form');
+        const successMessage = document.querySelector('.success-message');
+
+        newsletterForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = newsletterForm.querySelector('input').value;
+
+            try {
+                // Store in Firebase
+                await db.collection('newsletter').add({
+                    email: email,
+                    signupDate: new Date()
+                });
+
+                // Show success message
+                successMessage.style.display = 'block';
+                newsletterForm.reset();
+
+                // Hide success message after 3 seconds
+                setTimeout(() => {
+                    successMessage.style.display = 'none';
+                }, 3000);
+            } catch (error) {
+                console.error('Error:', error);
+                alert('Something went wrong. Please try again.');
+            }
+        });
+
+        // Size Guide Modal
+        const sizeGuideModal = document.getElementById('size-guide-modal');
+        const closeModal = document.querySelector('.close-modal');
+
+        document.querySelectorAll('.size-guide-link').forEach(link => {
+            link.addEventListener('click', () => {
+                sizeGuideModal.style.display = 'block';
+            });
+        });
+
+        closeModal.addEventListener('click', () => {
+            sizeGuideModal.style.display = 'none';
+        });
+
+        // Close modal on outside click
+        window.addEventListener('click', (e) => {
+            if (e.target === sizeGuideModal) {
+                sizeGuideModal.style.display = 'none';
+            }
+        });
+
+        // Previous JavaScript remains...
+    </script>
+</body>
+</html>
